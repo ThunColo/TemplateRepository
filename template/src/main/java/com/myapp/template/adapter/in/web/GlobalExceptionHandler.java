@@ -8,7 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.myapp.template.domain.exception.AuthenticationFailedException;
 import com.myapp.template.domain.exception.EmailAlreadyExistsException;
+import com.myapp.template.domain.exception.InvalidTokenException;
 import com.myapp.template.domain.exception.UserNotFoundException;
 
 /**
@@ -61,11 +63,34 @@ public class GlobalExceptionHandler {
      * 想定外の例外が発生したときに詳細をクライアントに返さないための防御策として、500 Internal Server Errorを返す。
      *
      * @param e Exception
-     * @return レスポンスエンティティ
+     * @reurn レスポンスエンティティ
      */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, Object>> handleGeneric(Exception e) {
         return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
+    }
+
+    /**
+     * レスポンスエンティティを構築するユーティリティメソッド。
+     *
+     * @param status HTTPステータス
+     * @param message エラーメッセージ
+     */
+    @ExceptionHandler(AuthenticationFailedException.class)
+    public ResponseEntity<Map<String, Object>> handleAuthenticationFailed(AuthenticationFailedException e) {
+        return buildResponse(HttpStatus.UNAUTHORIZED, e.getMessage());
+    }
+
+    /**
+     * レスポンスエンティティを構築するユーティリティメソッド。
+     *
+     * @param status HTTPステータス
+     * @param message エラーメッセージ
+     * @return レスポンスエンティティ
+     */
+    @ExceptionHandler(InvalidTokenException.class)
+    public ResponseEntity<Map<String, Object>> handleInvalidToken(InvalidTokenException e) {
+        return buildResponse(HttpStatus.UNAUTHORIZED, e.getMessage());
     }
 
     /**

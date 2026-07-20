@@ -36,3 +36,7 @@ build/
 .env
 # メモファイル
 PRIVATEMEMO.md
+
+# JWT鍵ファイル
+keys/
+

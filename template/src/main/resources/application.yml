@@ -19,3 +19,7 @@ spring:
 
 server:
   port: 8080
+
+jwt:
+  private-key-path: keys/private_key.pem
+  public-key-path: keys/public_key.pem
